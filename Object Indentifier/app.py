@@ -1,3 +1,7 @@
+"""
+This is the main part of the Project , where all the major parts of project are defined 
+"""
+# importing all the required libraries {open-sourced and built-in}
 import tkinter as tk
 from tkinter import simpledialog
 import cv2 as cv
@@ -6,8 +10,10 @@ import PIL.Image, PIL.ImageTk
 import model
 import camera
 
+# defining the Class Application where all the main part of the project is defined
 class App:
-
+    
+# Using the constructor to define the elements for the Application Class
     def __init__(self, window=tk.Tk(), window_title="Camera Classifier"):
 
         self.window = window
@@ -28,16 +34,20 @@ class App:
         self.window.attributes("-topmost", True)
         self.window.mainloop()
 
+    # Defining the Method for Graphical User Interface
     def init_gui(self):
-
+        
+        # Creating the window using tkinter
         self.canvas = tk.Canvas(self.window, width=self.camera.width, height=self.camera.height)
         self.canvas.pack()
-
+        
+        # Defining all the major buttons in the UI alongside with their commands.
         self.btn_toggleauto = tk.Button(self.window, text="Auto Prediction", width=50, command=self.auto_predict_toggle)
         self.btn_toggleauto.pack(anchor=tk.CENTER, expand=True)
 
         self.num = simpledialog.askinteger("Object Count", "Enter the number of objects you want:", parent=self.window)
-
+        
+        # Defining all the classes and their buttons // {num of objects that are being trained can be edited}
         self.counters = []
         for i in range(self.num):
             self.counters.append(1)
@@ -109,7 +119,8 @@ class App:
                 self.btn_class_two.pack(anchor=tk.CENTER, expand=True)
 
             i += 1
-
+            
+        # Defining the Button for training model //it calls the model class for training the model with the data 
         self.btn_train = tk.Button(self.window, text="Train Model", width=50, command=lambda: self.model.train_model(self.counters))
         self.btn_train.pack(anchor=tk.CENTER, expand=True)
 
@@ -126,7 +137,8 @@ class App:
 
     def auto_predict_toggle(self):
         self.auto_predict = not self.auto_predict
-
+        
+    # Defining the Save_for_class method , which stores the input data , into sorted and different directories
     def save_for_class(self, class_num):
         ret, frame = self.camera.get_frame()
         if not os.path.exists(str(class_num)):
@@ -140,6 +152,7 @@ class App:
 
         self.counters[class_num - 1] += 1
 
+# reset function
     def reset(self):
         for folder in self.folders:
             for file in os.listdir(folder):
@@ -151,6 +164,7 @@ class App:
         self.model = model.Model()
         self.class_label.config(text="____")
 
+    # Defining the update method // to continously update the Graphical User Interface
     def update(self):
         if self.auto_predict:
             print(self.predict())
@@ -162,7 +176,8 @@ class App:
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
 
         self.window.after(self.delay, self.update)
-
+        
+    # Defining the predict method, that takes predictions done by the Model and displays them in the interface.
     def predict(self):
         frame = self.camera.get_frame()
         prediction = self.model.predict(frame)
@@ -212,3 +227,4 @@ class App:
                 return self.classname_eight
         except:
             pass
+        
