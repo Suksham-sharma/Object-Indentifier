@@ -1,3 +1,5 @@
+""" The Main function, which is used to run the project, It calls the App the App File """
+
 import app
 
 def main():
