@@ -1,16 +1,15 @@
-'''
-Camera Classifier v0.1 Alpha
-Copyright (c) NeuralNine
+"""
+Object identifier version (1.4)
+"""
 
-Instagram: @neuralnine
-YouTube: NeuralNine
-Website: www.neuralnine.com
-'''
-
+# importing the open-cv resources 
 import cv2 as cv
 
-class Camera:
+# Defining the Camera Class for Input Data
 
+class Camera:
+    
+    # defining the class using Constructor
     def __init__(self):
         self.camera = cv.VideoCapture(0)
         if not self.camera.isOpened():
